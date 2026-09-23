@@ -4,8 +4,8 @@
 автосохранением в `localStorage`. Собрана на **Vite**, работает как **PWA** —
 устанавливается на телефон как обычное приложение и не теряет данные офлайн.
 
-> 📦 Сборка: [kanban-ts-tests](https://github.com/SofyaPim/kanban-ts-tests)
-> 🚀 Демо: [kanban-ts](https://sofyapim.github.io/kanban-ts/)
+
+[![Демо](https://img.shields.io/badge/Демо-Запустить-00C853?logo=googlechrome&logoColor=white)](https://sofyapim.github.io/kanban-ts/)
 
 ## Возможности
 
