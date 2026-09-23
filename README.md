@@ -29,21 +29,24 @@
 ## Быстрый старт
 
 `bash`
+
+```
 git clone https://github.com/SofyaPim/kanban-ts-tests.git
 cd kanban-ts-tests
 npm ci      # восстановить зависимости из package-lock.json
 npm test    # прогнать тесты
 npm run dev # открыть http://localhost:5173
+```
 Требуется Node.js 20.19+ и npm.
 
 ## Команды
-
+```
 npm run dev
 npm test
 npm run test:watch
 npm run build
 npm run preview
-
+```
 ## Тесты
 
 Тесты покрывают класс BoardStore (src/store.ts) — 10 тестов в пяти группах:
@@ -60,12 +63,14 @@ npm run preview
 ## CI
 
 Файл .github/workflows/ci.yml (.github/workflows/ci.yml) запускается на каждый push в main и на каждый pull request:
-1. npm ci — чистая установка по lockfile;
-2. npm test — прогон тестов;
-3. npm run build — сборка с проверкой типов.
+```
+npm ci          # чистая установка по lockfile;
+npm test        # прогон тестов;
+npm run build   # сборка с проверкой типов.
+```
 
 Установка PWA на телефон
-1. Откройте демо (https://sofyapim.github.io/kanban-ts/) в браузере телефона.
+1. Откройте [демо](https://sofyapim.github.io/kanban-ts/) в браузере телефона.
 2. Меню браузера → «Установить приложение» (Chrome/Android) или «Поделиться» → «На экран Домой» (Safari/iOS).
 3. Иконка появится на главном экране — приложение откроется в отдельном окне и будет работать офлайн.
 
