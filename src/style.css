@@ -1,0 +1,358 @@
+/* --- ПОДКЛЮЧЕНИЕ ШРИФТА --- */
+@import url('https://googleapis.com');
+
+/* --- ЦВЕТОВАЯ ПАЛИТРА И ТИПОГРАФИКА (ПЕРЕМЕННЫЕ) --- */
+:root {
+    --font-main: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --bg-main: #f6f6f6;         
+    --bg-column: #ffffff;       
+    --bg-input: #f5f5f7;        
+    --bg-column-hover: #f9f9fb; 
+    --bg-delete-hover: rgba(255, 59, 48, 0.05); 
+    --text-primary: #1d1d1f;    
+    --text-secondary: #6e6e73;  
+    --text-muted: #aeaeb2;      
+    --border-light: rgba(0, 0, 0, 0.04); 
+    --border-card: #e5e5ea;     
+    --border-card-hover: #c7c7cc; 
+    --accent-blue: #0071e3;     
+    --accent-dark: #1d1d1f;     
+    --accent-dark-hover: #333336; 
+    --accent-red: #ff3b30;      
+    --shadow-main: 0 4px 24px rgba(0, 0, 0, 0.015), 0 1px 2px rgba(0, 0, 0, 0.015);
+    --shadow-card-hover: 0 6px 16px rgba(0, 0, 0, 0.03);
+    --shadow-drag-active: 0 12px 32px rgba(0, 113, 227, 0.06);
+}
+
+/* --- СБРОС И БАЗОВЫЕ НАСТРОЙКИ --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: var(--font-main); 
+    color: var(--text-primary);
+    margin: 0;
+    min-height: 100vh;
+    padding: 30px 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Запрещаем появление горизонтального скролла на уровне всей страницы */
+    overflow-x: hidden; 
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+main h1 {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.8px; 
+    margin-bottom: 32px;
+    padding-left: 4px;
+}
+
+/* --- ИСПРАВЛЕННАЯ СЕТКА БЕЗ OVERFLOW-X --- */
+#app {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+    /* Больше никакого overflow-x: auto */
+}
+
+.column {
+    background-color: var(--bg-column);
+    /* flex: 1 1 0% заставляет все 3 колонки делиться строго поровну 
+       и сжиматься/растягиваться одновременно под ширину экрана */
+    flex: 1 1 0%; 
+    min-width: 0; /* Важнейшее свойство во флексбоксах: не дает контенту распирать колонку наружу */
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-main);
+    border: 1px solid var(--border-light);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Подсветка при перетаскивании (Яркая тонировка) */
+.column.column-highlight {
+    /* Плотный полупрозрачный синий фон, который мгновенно считывается глазом */
+    background-color: rgba(0, 113, 227, 0.06); 
+    border-color: var(--accent-blue);
+    /* Делаем рамку чуть толще в активном состоянии */
+    border-width: 1.5px;
+    /* Усиливаем тень вокруг колонки */
+    box-shadow: 0 16px 36px rgba(0, 113, 227, 0.12);
+    /* Слегка приподнимаем колонку к пользователю */
+    transform: translateY(-2px);
+}
+.column.column-highlight * {
+    pointer-events: none;
+}
+.column h2 {
+    font-size: 16px;
+    font-weight: 600; 
+    color: var(--text-secondary);
+    margin-top: 0;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 120px;
+}
+
+/* --- ФОРМА ДОБАВЛЕНИЯ ЗАДАЧИ --- */
+.column form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.column form input[type="text"] {
+    flex: 1;
+    min-width: 0; 
+    font-family: inherit; 
+    font-size: 14px;
+    padding: 11px 14px;
+    border: 1px solid var(--border-card);
+    border-radius: 10px;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.column form input[type="text"]::placeholder {
+    color: var(--text-muted);
+}
+
+.column form input[type="text"]:focus {
+    border-color: var(--text-secondary);
+    background-color: var(--bg-column);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.02);
+}
+
+.column form button[type="submit"] {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0 14px;
+    background-color: var(--accent-dark);
+    color: var(--bg-column);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.column form button[type="submit"]:hover {
+    background-color: var(--accent-dark-hover);
+}
+
+/* --- КАРТОЧКИ ЗАДАЧ --- */
+.card {
+    background-color: var(--bg-column);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.card:active {
+    cursor: grabbing;
+    opacity: 0.5; /* Снизили непрозрачность оригинала при переносе */
+}
+
+.card:hover {
+    border-color: var(--border-card-hover);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.card h2 {
+    font-size: 14px;
+    font-weight: 400; 
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.45;
+    word-break: break-word;
+    letter-spacing: -0.1px;
+}
+
+/* КНОПКА «УДАЛИТЬ» */
+.delete-btn {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.card:hover .delete-btn {
+    color: var(--text-secondary);
+}
+
+.delete-btn:hover {
+    color: var(--accent-red) !important;
+    background-color: var(--bg-delete-hover) !important;
+}
+
+/* --- АДАПТИВНОСТЬ ПОД СМАРТФОНЫ --- */
+@media (max-width: 768px) {
+    #app {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+    
+    .column {
+        flex: none; /* Сбрасываем деление экрана на смартфонах */
+        width: 100%;
+    }
+}
+
+
+/* *{
+  margin: 0;
+  padding: 0;
+  box-sizing:border-box
+}
+:root {
+
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+body {
+  margin: 0;
+}
+main{
+  background-color: var(--accent-bg);
+  color: var(--text)
+}
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  text-align: center;
+  padding: 20px 0;
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+
+#app {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+ gap: 20px;
+  box-sizing: border-box;
+ 
+}*/
+/* .column-highlight .card h2{
+  pointer-events: none;
+}
+.column-highlight .card input{
+  pointer-events: none;
+}
+.column-highlight .card button{
+  pointer-events: none;
+} 
+.column-highlight{
+  background-color: #e2c6ff;
+} */
+ 

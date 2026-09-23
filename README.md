@@ -1,0 +1,3 @@
+![CI](https://github.com/SofyaPim/kanban-ts-app/actions/workflows/ci.yml/badge.svg)
+(бейдж отразит «passing» после первого успешного прогона воркфлоу; до этого будет серым/пустым).
+Секции: описание, возможности (канбан, drag&drop, localStorage, PWA), стек (TS, Vite, vite-plugin-pwa, Vitest + happy-dom), «Установка» — npm ci после клонирования, затем npm test (клонирующий получит готовый проект именно так), команды (dev, test, test:watch, build, preview), описание тестов (что покрыто: BoardStore — инициализация/дефолт, addTask, updateTaskState + throw "check id", deleteTask, getTasks глубокое копирование), CI-бейдж и как он работает, инструкция установки PWA на телефон (ссылка https://sofyapim.github.io/kanban-ts/), структура проекта, деплой.
