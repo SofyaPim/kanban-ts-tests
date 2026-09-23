@@ -28,7 +28,7 @@
 
 ## Быстрый старт
 
-```bash
+```bash```
 git clone https://github.com/SofyaPim/kanban-ts-tests.git
 cd kanban-ts-tests
 npm ci      # восстановить зависимости из package-lock.json
@@ -36,7 +36,7 @@ npm test    # прогнать тесты
 npm run dev # открыть http://localhost:5173
 Требуется Node.js 20.19+ и npm.
 
-Команды
+## Команды
 
 npm run dev
 npm test
@@ -44,7 +44,8 @@ npm run test:watch
 npm run build
 npm run preview
 
-Тесты
+## Тесты
+
 Тесты покрывают класс BoardStore (src/store.ts) — 10 тестов в пяти группах:
 - инициализация — дефолтная задача при пустом localStorage, загрузка сохранённых задач;
 - addTask — заполнение полей, state по умолчанию todo, уникальность сгенерированных id, запись в localStorage;
@@ -53,7 +54,7 @@ npm run preview
 - getTasks — возвращает глубокую копию (structuredClone): мутации результата не ломают хранилище.
 Каждый тест изолирован: localStorage очищается в beforeEach.
 
-CI
+## CI
 
 Файл .github/workflows/ci.yml (.github/workflows/ci.yml) запускается на каждый push в main и на каждый pull request:
 1. npm ci — чистая установка по lockfile;
@@ -65,7 +66,7 @@ CI
 2. Меню браузера → «Установить приложение» (Chrome/Android) или «Поделиться» → «На экран Домой» (Safari/iOS).
 3. Иконка появится на главном экране — приложение откроется в отдельном окне и будет работать офлайн.
 
-Структура
+## Структура
 src/
 ├── main.ts        # рендер доски, drag & drop, события форм
 ├── store.ts       # BoardStore — состояние и localStorage
