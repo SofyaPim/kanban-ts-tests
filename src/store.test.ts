@@ -36,7 +36,7 @@ describe("BoardStore", () => {
       expect(tasks).toHaveLength(1);
       expect(tasks[0]).toMatchObject({
         id: "1",
-        title: "exemple task",
+        title: "example task",
         state: "todo",
       });
       expect(tasks[0].createdAt).toBe(1);
